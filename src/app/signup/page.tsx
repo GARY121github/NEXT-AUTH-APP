@@ -11,10 +11,25 @@ export default function SignupPage() {
     password: "",
   });
 
+  const router = useRouter();
+
   const onRegister = async () => {
-    console.log(user);
+    try {
+      const response = await axios.post("/api/user/signup", user);
+      console.log("api response ", response);
+      console.log(response.data);
+      console.log(response.data.status);
+      console.log(typeof response.status);
+      if (response.status === 201) {
+        router.push("/login");
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-  
+
   return (
     <div className="flex flex-col p-5 mt-36 w-4/12 mx-auto">
       <h1 className="text-center text-3xl mb-5">create a new account</h1>
@@ -28,7 +43,7 @@ export default function SignupPage() {
           id="username"
           placeholder="gary"
           onChange={(e) => setUser({ ...user, username: e.target.value })}
-          className="border-2 border-gray-400 rounded-md p-1 text-slate-950 outline-none"
+          className="border-2 border-gray-400 rounded-md p-2 text-slate-950 outline-none"
         />
         <label htmlFor="email" className="text-2xl mb-2 mt-2">
           email :{" "}
@@ -39,7 +54,7 @@ export default function SignupPage() {
           id="email"
           placeholder="xyz@gmail.com"
           onChange={(e) => setUser({ ...user, email: e.target.value })}
-          className="border-2 border-gray-400 rounded-md p-1 text-slate-950 outline-none"
+          className="border-2 border-gray-400 rounded-md p-2 text-slate-950 outline-none"
         />
         <label htmlFor="password" className="text-2xl mb-2 mt-2">
           password :{" "}
@@ -49,7 +64,7 @@ export default function SignupPage() {
           name="password"
           id="password"
           onChange={(e) => setUser({ ...user, password: e.target.value })}
-          className="border-2 border-gray-400 rounded-md p-1 text-slate-950 outline-none"
+          className="border-2 border-gray-400 rounded-md p-2 text-slate-950 outline-none"
         />
       </div>
       <button
